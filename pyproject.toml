@@ -1,0 +1,53 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "easy-ml-preprocess"
+version = "0.1"
+description = 'Simplifying the preprocessing process'
+readme = "README.md"
+requires-python = ">=3.8"
+license = "MIT"
+keywords = []
+authors = [
+  { name = "Isaac Ireland" },
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+]
+dependencies = []
+
+[project.urls]
+Documentation = "https://github.com/Isaac Ireland/easy-ml-preprocess#readme"
+Issues = "https://github.com/Isaac Ireland/easy-ml-preprocess/issues"
+Source = "https://github.com/Isaac Ireland/easy-ml-preprocess"
+
+[tool.hatch.envs.types]
+extra-dependencies = [
+  "mypy>=1.0.0",
+]
+[tool.hatch.envs.types.scripts]
+check = "mypy --install-types --non-interactive {args:src/easy_ml_preprocess tests}"
+
+[tool.coverage.run]
+source_pkgs = ["easy_ml_preprocess", "tests"]
+branch = true
+parallel = true
+omit = [
+  "src/easy_ml_preprocess/__about__.py",
+]
+
+[tool.coverage.paths]
+easy_ml_preprocess = ["src/easy_ml_preprocess", "*/easy-ml-preprocess/src/easy_ml_preprocess"]
+tests = ["tests", "*/easy-ml-preprocess/tests"]
+
+[tool.coverage.report]
+exclude_lines = [
+  "no cov",
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:",
+]

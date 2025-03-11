@@ -1,0 +1,45 @@
+preprocessing:
+  numeric:
+    columns:
+      ASK:
+        imputer_strategy: mean
+        scaler: StandardScaler
+      ASK_QTY:
+        imputer_strategy: mean
+        scaler: StandardScaler
+      BID:
+        imputer_strategy: mean
+        scaler: StandardScaler
+      BID_QTY:
+        imputer_strategy: mean
+        scaler: StandardScaler
+      CHANGE:
+        imputer_strategy: mean
+        scaler: StandardScaler
+      CHANGE_PCT:
+        imputer_strategy: mean
+        scaler: StandardScaler
+      HIGH:
+        imputer_strategy: mean
+        scaler: StandardScaler
+      LAST:
+        imputer_strategy: mean
+        scaler: StandardScaler
+      LOW:
+        imputer_strategy: mean
+        scaler: StandardScaler
+      VOLUME:
+        imputer_strategy: mean
+        scaler: StandardScaler
+  categorical:
+    columns:
+      TIMESTAMP:
+        imputer_strategy: most_frequent
+        encoder: LabelEncoder
+      CHANNEL:
+        imputer_strategy: most_frequent
+        encoder: LabelEncoder
+      SYMBOL:
+        imputer_strategy: most_frequent
+        encoder: OneHotEncoder
+output_type: pandas
