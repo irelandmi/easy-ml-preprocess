@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 import argparse
 import pandas as pd
 import numpy as np
@@ -35,14 +33,17 @@ def main():
     # -------------------------------------------------------------------------
     # A) Basic Info
     # -------------------------------------------------------------------------
+    report.append("--------------------------------------------------------")
     report.append("========== DATA HEALTH REPORT ==========\n")
     report.append(f"FILE: {args.input_csv}\n")
     report.append(f"NUMBER OF ROWS: {df.shape[0]}\n")
     report.append(f"NUMBER OF COLUMNS: {df.shape[1]}\n\n")
-
+    report.append("--------------------------------------------------------")
     # -------------------------------------------------------------------------
     # B) Missing Values
     # -------------------------------------------------------------------------
+    report.append("--------------------------------------------------------")
+    report.append("========== MISSING VALUES ==========\n")
     missing_counts = df.isnull().sum()
     missing_percentages = (missing_counts / len(df)) * 100
     report.append("MISSING VALUES (Count | Percentage):\n")
@@ -53,28 +54,41 @@ def main():
             msg = f"  {col}: 0"
         report.append(msg)
     report.append("")
-
+    report.append("--------------------------------------------------------")
     # -------------------------------------------------------------------------
     # C) Duplicate Rows
     # -------------------------------------------------------------------------
+    report.append("--------------------------------------------------------")
+    report.append("========== DUPLICATE ROWS ==========\n")
     duplicate_count = df.duplicated().sum()
     if duplicate_count > 0:
         report.append(f"DUPLICATE ROWS: {duplicate_count} (Consider dropping them)\n")
     else:
         report.append("DUPLICATE ROWS: None detected\n")
-
+    report.append("--------------------------------------------------------")
     # -------------------------------------------------------------------------
     # D) Data Types Overview
     # -------------------------------------------------------------------------
+    report.append("--------------------------------------------------------")
+    report.append("========== DATA TYPES ==========\n")
+    report.append("\nDATA TYPES Counts:\n")
+    dtype_info = df.dtypes.groupby(df.dtypes).count().astype(str)
+
+    for dtype, count in dtype_info.items():
+        report.append(f" {dtype}: {count} columns")
+    report.append("")
+
     report.append("\nDATA TYPES:\n")
     dtype_info = df.dtypes.astype(str)
     for col in df.columns:
         report.append(f"  {col}: {dtype_info[col]}")
     report.append("")
-
+    report.append("--------------------------------------------------------")
     # -------------------------------------------------------------------------
     # E) Numeric Checks (Outliers, Basic Stats)
     # -------------------------------------------------------------------------
+    report.append("--------------------------------------------------------")
+    report.append("========== NUMERIC COLUMNS ==========\n")
     numeric_cols = df.select_dtypes(include=[np.number]).columns
     if len(numeric_cols) > 0:
         report.append("NUMERIC COLUMNS STATISTICS:\n")
@@ -107,10 +121,12 @@ def main():
 
     else:
         report.append("NO NUMERIC COLUMNS DETECTED.\n")
-
+    report.append("--------------------------------------------------------")
     # -------------------------------------------------------------------------
     # F) Categorical Checks (Cardinality, Value Counts)
     # -------------------------------------------------------------------------
+    report.append("--------------------------------------------------------")
+    report.append("========== CATEGORICAL COLUMNS ==========\n")
     categorical_cols = df.select_dtypes(include=["object", "category"]).columns
     if len(categorical_cols) > 0:
         report.append("CATEGORICAL COLUMNS SUMMARY:\n")
@@ -124,10 +140,13 @@ def main():
         report.append("")
     else:
         report.append("NO CATEGORICAL COLUMNS DETECTED.\n")
+    report.append("--------------------------------------------------------")
 
     # -------------------------------------------------------------------------
     # G) Constant or Near-Constant Columns
     # -------------------------------------------------------------------------
+    report.append("--------------------------------------------------------")
+    report.append("========== CONSTANT / NEAR-CONSTANT COLUMNS ==========\n")
     # Sometimes columns with zero variance can be dropped
     near_constant_cols = []
     for col in df.columns:
@@ -143,10 +162,13 @@ def main():
         report.append("")
     else:
         report.append("NO NEAR-CONSTANT COLUMNS DETECTED.\n")
+    report.append("--------------------------------------------------------")
 
     # -------------------------------------------------------------------------
     # H) Correlation Check (Optional)
     # -------------------------------------------------------------------------
+    report.append("--------------------------------------------------------")
+    report.append("========== CORRELATION MATRIX ==========\n")
     # Simple approach: only for numeric columns. In practice, you might want a more advanced check.
     if len(numeric_cols) > 1:
         corr_matrix = df[numeric_cols].corr()
@@ -155,10 +177,12 @@ def main():
         report.append("")
     else:
         report.append("NOT ENOUGH NUMERIC COLUMNS FOR CORRELATION ANALYSIS.\n")
+    report.append("--------------------------------------------------------")
 
     # -------------------------------------------------------------------------
     # Print or Save Report
     # -------------------------------------------------------------------------
+    report.append("--------------------------------------------------------")
     final_report = "\n".join(report)
 
     if args.output_report:
