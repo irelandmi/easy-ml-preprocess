@@ -4,22 +4,27 @@ build-backend = "hatchling.build"
 
 [project]
 name = "easy-ml-preprocess"
-version = "0.1"
+version = "0.2"
 description = 'Simplifying the preprocessing process'
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.12"
 license = "MIT"
 keywords = []
 authors = [
   { name = "Isaac Ireland" },
 ]
+
 classifiers = [
   "Development Status :: 4 - Beta",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: Implementation :: CPython",
   "Programming Language :: Python :: Implementation :: PyPy",
 ]
+
 dependencies = []
+
+[project.scripts]
+easy_ml_preprocess = "easy_ml_preprocess.main:main"
 
 [project.urls]
 Documentation = "https://github.com/Isaac Ireland/easy-ml-preprocess#readme"

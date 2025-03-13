@@ -3,20 +3,7 @@ import pandas as pd
 import numpy as np
 import os
 
-def main():
-    parser = argparse.ArgumentParser(description="Perform basic health checks on a CSV dataset.")
-    parser.add_argument(
-        "--input_csv", 
-        required=True, 
-        help="Path to the CSV file containing the dataset."
-    )
-    parser.add_argument(
-        "--output_report",
-        required=False,
-        help="Path to the output report file. If not specified, prints to console."
-    )
-    args = parser.parse_args()
-
+def main(args):
     # 1. Ensure input CSV exists
     if not os.path.isfile(args.input_csv):
         raise FileNotFoundError(f"Could not find file: {args.input_csv}")

@@ -4,34 +4,8 @@ import pandas as pd
 import numpy as np
 import os
 
-def main():
-    parser = argparse.ArgumentParser(description="Generate YAML config with column-specific encoders.")
-    parser.add_argument(
-        "--input_csv",
-        required=True,
-        help="Path to the CSV file containing raw features."
-    )
-    parser.add_argument(
-        "--output_yaml",
-        required=True,
-        help="Path to the output YAML file to be generated."
-    )
-    parser.add_argument(
-        "--base_yaml",
-        required=False,
-        help="Optional path to a base YAML file. If provided, this script will load "
-             "that YAML first, then override or add settings based on the CSV."
-    )
-    parser.add_argument(
-        "--output_type",
-        choices=["pandas", "torch"],
-        default="pandas",
-        help="Desired output data format in the generated config (default: pandas)."
-    )
-    # Optionally, you could also let users provide defaults for numeric/categorical
-    # transformations, but here we hardcode typical defaults.
-    args = parser.parse_args()
-
+def main(args):
+    
     # -------------------------------------------------------------------------
     # 1. Load the CSV data to infer numeric vs. categorical columns
     # -------------------------------------------------------------------------
@@ -123,4 +97,30 @@ def main():
     print(f"YAML config file generated at: {args.output_yaml}")
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description="Generate YAML config with column-specific encoders.")
+    parser.add_argument(
+        "--input_csv",
+        required=True,
+        help="Path to the CSV file containing raw features."
+    )
+    parser.add_argument(
+        "--output_yaml",
+        required=True,
+        help="Path to the output YAML file to be generated."
+    )
+    parser.add_argument(
+        "--base_yaml",
+        required=False,
+        help="Optional path to a base YAML file. If provided, this script will load "
+             "that YAML first, then override or add settings based on the CSV."
+    )
+    parser.add_argument(
+        "--output_type",
+        choices=["pandas", "torch"],
+        default="pandas",
+        help="Desired output data format in the generated config (default: pandas)."
+    )
+    # Optionally, you could also let users provide defaults for numeric/categorical
+    # transformations, but here we hardcode typical defaults.
+    args = parser.parse_args()
+    main(args)

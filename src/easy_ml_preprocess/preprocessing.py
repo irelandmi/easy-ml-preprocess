@@ -33,6 +33,15 @@ class LabelEncoderTransformer(BaseEstimator, TransformerMixin):
             X = X.iloc[:, 0]
         encoded = self.encoder.transform(X.astype(str))
         return encoded.reshape(-1, 1)
+    
+    def get_feature_names_out(self, input_features=None):
+        """Return output feature name(s)."""
+        # If it's only one column in → one column out, you can safely return the same name.
+        # Alternatively, append '_encoded' or something to clarify that it's transformed.
+        if input_features is None:
+            return [f"label_encoded"]
+        else:
+            return [f"{col}_encoded" for col in input_features]
 
 class PreprocessingPipeline:
     def __init__(self, config_path: str):
@@ -127,31 +136,20 @@ class PreprocessingPipeline:
         else:
             # Categorical
             if transformer_name == "OneHotEncoder":
-                return OneHotEncoder(handle_unknown="ignore")
+                return OneHotEncoder(sparse_output=False, handle_unknown="ignore")
             elif transformer_name == "LabelEncoder":
                 return LabelEncoderTransformer()
             else:
                 # Optionally handle "OrdinalEncoder", etc.
                 raise ValueError(f"Unknown categorical encoder: '{transformer_name}'")
 
-    def _format_output(self, transformed, reference_df: pd.DataFrame):
-        """
-        Convert the transformed numpy array to either a Pandas DataFrame or a Torch Tensor.
-        """
-
-        print(reference_df.columns)
+    def _format_output(self, transformed, reference_df):
         if self.output_type == "pandas":
             # Reconstruct feature names from the ColumnTransformer
-            # ColumnTransformer has a .get_feature_names_out() method (>= sklearn 1.0).
-            # For older versions, you can do some custom name logic.
-            try:
-                feature_names = self.column_transformer.get_feature_names_out(input_features=reference_df.columns)
-            except:
-                # Fallback if you're on older sklearn
-                print("Falling back...")
-                num_features = transformed.shape[1]
-                feature_names = [f"feature_{i}" for i in range(num_features)]
-            
+            feature_names = self.column_transformer.get_feature_names_out(
+                input_features=reference_df.columns
+            )
+            print(feature_names)
             return pd.DataFrame(transformed, columns=feature_names)
 
         elif self.output_type == "torch":
