@@ -2,6 +2,37 @@ import argparse
 import pandas as pd
 import numpy as np
 import os
+import yaml
+
+def generate_yaml_loader_config(df, output_yaml):
+    """
+    Generate a YAML configuration file for column data types.
+    """
+    yaml_config = {}
+    for col in df.columns:
+        dtype = str(df[col].dtypes)
+        if dtype == "object":
+            # Check if the column can be parsed as a datetime
+            try:
+                pd.to_datetime(df[col], errors="raise")
+                dtype = "datetime"
+            except Exception:
+                pass
+        yaml_config[col] = dtype
+
+    # Ensure the output directory exists
+    output_dir = os.path.dirname(output_yaml)
+    if output_dir and not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+        print(f"Created directory: {output_dir}")
+
+    # Save the YAML configuration
+    try:
+        with open(output_yaml, "w", encoding="utf-8") as yaml_file:
+            yaml.dump(yaml_config, yaml_file, default_flow_style=False)
+        print(f"YAML loader configuration saved to: {output_yaml}")
+    except Exception as e:
+        print(f"Could not write YAML configuration to {output_yaml}: {e}")
 
 def main(args):
     # 1. Ensure input CSV exists
@@ -16,6 +47,12 @@ def main(args):
 
     # 3. Generate the health checks
     report = []
+
+    # -------------------------------------------------------------------------
+    # Generate YAML Loader Config
+    # -------------------------------------------------------------------------
+    if args.output_yaml:
+        generate_yaml_loader_config(df, args.output_yaml)
 
     # -------------------------------------------------------------------------
     # A) Basic Info

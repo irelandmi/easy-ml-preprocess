@@ -10,6 +10,7 @@ def main():
     # Subcommand: generate_report
     parser_gen_report = subparsers.add_parser("generate_report", help="Generate a report")
     parser_gen_report.add_argument("--input_csv", required=True, type=str, help="File path to the CSV file")
+    parser_gen_report.add_argument("--output_yaml", required=True, type=str, help="=Path to the output YAML file to be generated.")
     parser_gen_report.add_argument("--output_report", type=str, help="Output filepath and name for the report")
     parser_gen_report.set_defaults(func=lambda args: health_check.main(args))
 
