@@ -16,6 +16,10 @@
 pip install easy-ml-preprocess
 ```
 
-## License
+## Setup
+### Linux/MacOS
+To setup your export location add the following to your ~/.zshrc or ~/.bashrc
+- export EASY_ML_PREPROCESS=~/desired_export_location
 
+## License
 `easy-ml-preprocess` is distributed under the terms of the [MIT](https://spdx.org/licenses/MIT.html) license.
